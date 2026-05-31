@@ -10,11 +10,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600;700&display=swap" rel="stylesheet">
 
-  <!-- Firebase Compat SDK -->
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 
-  <!-- QRCode.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 <style>
@@ -53,6 +51,7 @@
 
 html, body {
   height: 100%;
+  width: 100%;
   background: var(--bg);
   color: #dde0ff;
   font-family: var(--f-body);
@@ -194,6 +193,7 @@ body::after {
   border:1.5px solid var(--green);
   font-size:.68rem; letter-spacing:1px;
   padding:7px 13px;
+  flex-shrink: 0;
 }
 .btn-green:hover { box-shadow:var(--glow-green); background:rgba(0,255,136,.18); }
 .btn-green.added { color:rgba(0,255,136,.4); border-color:rgba(0,255,136,.3); pointer-events:none; }
@@ -208,7 +208,8 @@ input[type="text"] {
   background:rgba(0,229,255,.05);
   border:1.5px solid rgba(0,229,255,.3);
   border-radius:var(--r-sm);
-  color:#dde0ff; font-family:var(--f-body); font-size:.95rem;
+  color:#dde0ff; font-family:var(--f-body); 
+  font-size:16px; /* Explicitly forced to 16px to permanently disable iOS browser auto-zoom layouts */
   padding:11px 14px; outline:none; width:100%;
   transition:border-color .2s, box-shadow .2s;
   -webkit-appearance:none;
@@ -441,6 +442,7 @@ input[type="text"]::placeholder { color:rgba(220,225,255,.28); }
 .queue-list {
   flex:1; overflow-y:auto; display:flex;
   flex-direction:column; gap:5px;
+  -webkit-overflow-scrolling: touch;
 }
 .queue-list::-webkit-scrollbar { width:3px; }
 .queue-list::-webkit-scrollbar-thumb { background:rgba(0,229,255,.25); border-radius:2px; }
@@ -482,6 +484,7 @@ input[type="text"]::placeholder { color:rgba(220,225,255,.28); }
   flex-direction:column; align-items:center;
   padding:20px 14px; gap:0;
   overflow-y:auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .qr-eyebrow {
@@ -604,6 +607,7 @@ input[type="text"]::placeholder { color:rgba(220,225,255,.28); }
 
 .results-wrap {
   flex:1; overflow-y:auto; padding:8px;
+  -webkit-overflow-scrolling: touch;
 }
 .results-wrap::-webkit-scrollbar { width:3px; }
 .results-wrap::-webkit-scrollbar-thumb { background:rgba(0,229,255,.25); border-radius:2px; }
@@ -615,6 +619,7 @@ input[type="text"]::placeholder { color:rgba(220,225,255,.28); }
   border:1px solid transparent;
   transition:all .18s; cursor:default;
   margin-bottom:4px;
+  width: 100%;
 }
 .result-item:hover { background:rgba(0,229,255,.04); border-color:rgba(0,229,255,.15); }
 
@@ -626,6 +631,7 @@ input[type="text"]::placeholder { color:rgba(220,225,255,.28); }
 .res-title {
   font-size:.88rem; font-weight:600;
   white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  width: 100%;
 }
 .res-ch { font-size:.7rem; color:rgba(220,225,255,.38); margin-top:2px; }
 
@@ -660,7 +666,7 @@ input[type="text"]::placeholder { color:rgba(220,225,255,.28); }
 .overlay.hidden { display:none; }
 
 .onboard-card {
-  width:100%; max-width:380px;
+  width:90%; max-width:380px;
   padding:32px 24px; text-align:center;
   animation:bounce-in .45s ease-out;
 }
@@ -727,7 +733,7 @@ input[type="text"]::placeholder { color:rgba(220,225,255,.28); }
 }
 .modal.hidden { display:none; }
 .modal-box {
-  width:100%; max-width:320px;
+  width:90%; max-width:320px;
   padding:28px 22px; text-align:center;
   animation:bounce-in .3s ease-out;
 }
@@ -783,9 +789,6 @@ input[type="text"]::placeholder { color:rgba(220,225,255,.28); }
 </head>
 <body>
 
-<!-- =====================================================
-     SETUP SCREEN
-     ===================================================== -->
 <div id="screen-setup" class="screen active">
   <div class="setup-wrap">
     <div class="logo-sm setup-logo t-cyan">⚡ PARTY JUKEBOX</div>
@@ -810,9 +813,6 @@ input[type="text"]::placeholder { color:rgba(220,225,255,.28); }
   </div>
 </div>
 
-<!-- =====================================================
-     HOST SCREEN
-     ===================================================== -->
 <div id="screen-host" class="screen">
   <div class="host-hdr">
     <div class="logo-sm t-cyan">⚡ JUKEBOX</div>
@@ -820,9 +820,7 @@ input[type="text"]::placeholder { color:rgba(220,225,255,.28); }
   </div>
 
   <div class="host-body">
-    <!-- Left -->
     <div class="host-left">
-      <!-- Now Playing -->
       <div class="np-section">
         <div class="np-eyebrow">
           <div class="eq paused" id="host-eq">
@@ -844,25 +842,21 @@ input[type="text"]::placeholder { color:rgba(220,225,255,.28); }
         </div>
       </div>
 
-      <!-- YouTube Player -->
       <div class="yt-wrap" id="yt-wrap">
         <div id="yt-player-div"></div>
       </div>
       <button class="yt-tog" id="yt-tog">▲ HIDE VIDEO</button>
 
-      <!-- Controls -->
       <div class="host-ctrl">
         <button class="ctrl-btn" id="btn-skip" title="Skip Song">⏭</button>
       </div>
 
-      <!-- Queue -->
       <div class="queue-panel">
         <div class="section-label t-purple">Up Next</div>
         <div class="queue-list" id="host-queue"></div>
       </div>
     </div>
 
-    <!-- Right: QR -->
     <div class="host-right">
       <div class="qr-eyebrow">Scan to Join</div>
       <div class="qr-frame"><div id="qr-code"></div></div>
@@ -874,13 +868,9 @@ input[type="text"]::placeholder { color:rgba(220,225,255,.28); }
     </div>
   </div>
 
-  <!-- Mobile QR FAB -->
   <button class="qr-fab" id="qr-fab">📱</button>
 </div>
 
-<!-- =====================================================
-     GUEST SCREEN
-     ===================================================== -->
 <div id="screen-guest" class="screen">
   <div class="guest-hdr">
     <div class="logo-sm t-pink">⚡ JUKEBOX</div>
@@ -908,7 +898,6 @@ input[type="text"]::placeholder { color:rgba(220,225,255,.28); }
     <button class="tab-btn" data-tab="queue">📋 Queue</button>
   </div>
 
-  <!-- Search Tab -->
   <div class="tab-pane on" id="tab-search">
     <div class="search-row">
       <input type="text" id="search-inp" placeholder="Search for a song or artist…" autocomplete="off">
@@ -922,17 +911,11 @@ input[type="text"]::placeholder { color:rgba(220,225,255,.28); }
     </div>
   </div>
 
-  <!-- Queue Tab -->
   <div class="tab-pane" id="tab-queue">
     <div class="queue-list" id="guest-queue" style="padding:10px; flex:1; overflow-y:auto;"></div>
   </div>
 </div>
 
-<!-- =====================================================
-     OVERLAYS
-     ===================================================== -->
-
-<!-- Guest onboarding -->
 <div class="overlay hidden" id="onboard-overlay">
   <div class="onboard-card card">
     <span class="logo-sm t-pink">JOIN THE PARTY</span>
@@ -955,7 +938,6 @@ input[type="text"]::placeholder { color:rgba(220,225,255,.28); }
   </div>
 </div>
 
-<!-- Host start overlay -->
 <div id="start-overlay">
   <h2 class="t-cyan">READY TO PARTY?</h2>
   <p>Tap ▶ to activate the player. Guests will be able to add songs and music will play automatically!</p>
@@ -963,7 +945,6 @@ input[type="text"]::placeholder { color:rgba(220,225,255,.28); }
 </div>
 <style>#start-overlay{display:none;}</style>
 
-<!-- QR modal (mobile host) -->
 <div class="modal hidden" id="qr-modal">
   <div class="modal-box card">
     <div class="qr-eyebrow" style="font-family:var(--f-head); font-size:.62rem; letter-spacing:3px; color:var(--pink); text-shadow:var(--glow-pink); margin-bottom:12px;">INVITE GUESTS</div>
@@ -976,22 +957,9 @@ input[type="text"]::placeholder { color:rgba(220,225,255,.28); }
   </div>
 </div>
 
-<!-- Toast container -->
 <div id="toasts"></div>
 
-<!-- =====================================================
-     SCRIPTS
-     ===================================================== -->
 <script>
-/* ================================================================
-   ⚡ PARTY JUKEBOX — Main Application
-   ================================================================
-   SETUP REQUIRED:
-   1. Replace CONFIG.firebase with your Firebase project config
-   2. Replace CONFIG.youtubeApiKey with your YouTube Data API v3 key
-   See README.md for step-by-step instructions.
-   ================================================================ */
-
 const CONFIG = {
   firebase: {
     apiKey:            "AIzaSyCoYXqx-Pu1REaZRwvfIy5EBWeUn6pQAVM",
